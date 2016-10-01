@@ -51,7 +51,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 	//pure
 	void next() {
-		//writeln ("Pos: ", pos, " Length: ", input.length);
 		if (pos >= input.length) {
 			c = EOF;
 			ident = [EOF];
@@ -59,7 +58,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		}
 
 		skip_whitespace();
-		//writeln ("Starting with c ", c, ", pos ", pos, " and ident '", ident, "'");
 		ident = "";
 		int i = 0;
 		do {
@@ -70,9 +68,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		while (!separates(c) && pos < input.length - 1 );
 
 		skip_whitespace();
-		//if (!__ctfe) { writeln ("ident now: ", ident);
-		  //writeln ("c now: ", c != EOF ? to!string(c) : "eof");
-		//}
 	}
 
 	void expect(string e) {
@@ -94,7 +89,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	}
 
 	string parse_object (bool toplevel = false) {
-		//skip_whitespace();
 		string object_type = ident;
 		string object_id = null;
 		next();
@@ -114,26 +108,13 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		string[string] construct_props;
 		string[string] non_construct_props;
 		expect("{");
-		//assert(ident == "{");
-		//next();
-		//assert(ident != "{");
-		//writeln("");
-		//writeln("");
-		//writeln("");
 		next();
-		//writeln ("Ident before starting to parse props: ", ident, ", c: ", c);
 		while (ident[0] == '.' || ident[0] == '|') {
-		//while (ident == "." || ident == "|") {
-		//while (c == '.' || c == '|') {
 			bool construct = (ident[0] == '|');
-			//next();
 			string prop_name = ident;
-			//writeln ("prop name; ", prop_name, "(", construct, ")");
 			next();
 			expect("=");
-			//next();
 			string prop_value = get_until('\n').strip();
-			//writeln ("Value: ", prop_value);
 			if (construct) {
 				construct_props[prop_name[1..$]] = prop_value;
 			} else {
@@ -141,7 +122,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			}
 
 			next();
-			//writeln ("## After reading prop: ident=", ident, ", c=", c);
 		}
 
 
@@ -168,13 +148,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			result ~= ");\n";
 		}
 
-		//if (!__ctfe)
-		//writeln ("before reading child objects: ", ident, ", c: ", c);
-		// Now read child objects
-		//if (!__ctfe) writeln ("c before reading objects: ", c);
 		while (ident != "}") { // until this object ends
-		  //if (!__ctfe)
-			//writeln ("reading child object ...");
 			string child = parse_object();
 			result ~= object_id ~ ".add(" ~ child ~ ");\n";
 		}
@@ -211,4 +185,7 @@ unittest {
 	string s2 = __generate_ui("Box this{|spacing = 12\n|foo = \"bla\"\n}");
 	//writeln(s2);
 	assert(s2.strip() == "super(12, \"bla\", );");
+
+	string s3 = __generate_ui("Box this{|spacing = 12\n|foo = _(\"bla\")\n}");
+	assert(s3.strip() == "super(12, _(\"bla\"), );");
 }
