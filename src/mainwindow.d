@@ -67,12 +67,5 @@ class MainWindow: ApplicationWindow {
 			top_bar.add(b);
 		}
 
-
-		this.addOnDelete(&on_delete);
-	}
-
-	private bool on_delete(Event e, Widget w) {
-		Main.quit();
-		return false;
 	}
 }
