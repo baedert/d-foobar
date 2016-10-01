@@ -6,7 +6,8 @@ input_files = files([
   'src/app.d',
   'src/mainwindow.d',
   'src/cgreport.d',
-  'src/gtkutils.d'
+  'src/gtkutils.d',
+  'src/ipage.d',
 ])
 
 

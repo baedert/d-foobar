@@ -23,6 +23,15 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	string ident = null;
 	string[string] object_ids;
 
+	enum ChildType {
+		NONE,
+		TITLEBAR,
+	}
+	struct ChildInfo {
+		ChildType type;
+		string id;
+	}
+
 	uint irrelevant_id = 0;
 	string get_irrelevant_ident() {
 		return "__object__" ~ to!string(irrelevant_id ++);
@@ -70,10 +79,10 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		skip_whitespace();
 	}
 
-	void expect(string e) {
+	void expect(string e, int line = __LINE__) {
 		if (ident != e) {
 			if (!__ctfe)
-				writeln ("Expected ", e, ", but found ", ident, " at pos ", pos);
+				  writeln ("Expected ", e, ", but found ", ident, " at pos ", pos, " from line ", line);
 			assert(ident == e);
 		}
 	}
@@ -88,22 +97,34 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		return result;
 	}
 
-	string parse_object (bool toplevel = false) {
+	ChildInfo parse_object (bool toplevel = false) {
+		ChildInfo child_info;
 		string object_type = ident;
 		string object_id = null;
 		next();
 		if (ident != "{") {
 			// Read object ID (optional!)
-			object_id = ident;
+			child_info.id = ident;
 			next();
 			if (!toplevel)
-				object_ids[object_id] = object_type;
+				object_ids[child_info.id] = object_type;
 		} else {
-			object_id = get_irrelevant_ident();
+			child_info.id = get_irrelevant_ident();
+		}
+
+		if (ident != "{") {
+			// child type
+			string child_type = ident[1..$];
+			//writeln(child_type);
+			if (child_type == "titlebar")
+				child_info.type = ChildType.TITLEBAR;
+			else
+				assert(0);
+			next();
 		}
 
 		if (toplevel)
-			assert(object_id == "this");
+			assert(child_info.id == "this");
 
 		string[string] construct_props;
 		string[string] non_construct_props;
@@ -127,10 +148,10 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 		if (!toplevel) {
 			// Generate the declaration
-			if (!just_members && object_id in object_ids)
-				result ~= object_id ~ " = new " ~ object_type ~ "(";
+			if (!just_members && child_info.id in object_ids)
+				result ~= child_info.id ~ " = new " ~ object_type ~ "(";
 			else
-				result ~= object_type ~ " " ~ object_id ~ " = new " ~ object_type ~ "(";
+				result ~= object_type ~ " " ~ child_info.id ~ " = new " ~ object_type ~ "(";
 
 			// This will leave a trailing comma but whatever
 			foreach (prop_name; construct_props.keys) {
@@ -138,7 +159,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			}
 			result ~= ");\n";
 			foreach (prop_name; non_construct_props.keys) {
-				result ~= object_id ~ ".set" ~ prop_name ~ "(" ~ non_construct_props[prop_name] ~ ");\n";
+				result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ non_construct_props[prop_name] ~ ");\n";
 			}
 		} else {
 			result ~= "super(";
@@ -149,14 +170,17 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 		}
 
 		while (ident != "}") { // until this object ends
-			string child = parse_object();
-			result ~= object_id ~ ".add(" ~ child ~ ");\n";
+			auto child = parse_object();
+			if (child.type == ChildType.TITLEBAR)
+				result ~= child_info.id ~ ".setTitlebar(" ~ child.id ~ ");\n";
+			else
+				result ~= child_info.id ~ ".add(" ~ child.id ~ ");\n";
 		}
 
 		//next();
 		next();
 
-		return object_id;
+		return child_info;
 	}
 
 	// Kick off
@@ -188,4 +212,8 @@ unittest {
 
 	string s3 = __generate_ui("Box this{|spacing = 12\n|foo = _(\"bla\")\n}");
 	assert(s3.strip() == "super(12, _(\"bla\"), );");
+
+	// child with type
+	string s4 = __generate_ui("Box this{|spacing = 12\n|foo = _(\"bla\")\nButton btn $titlebar {\n.l = 4\n}\n}");
+
 }
