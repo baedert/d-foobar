@@ -11,8 +11,10 @@ import gtk.Separator;
 import gtk.Application;
 import gtk.ApplicationWindow;
 
+
 import gtkutils;
-import ipage;
+import account;
+import mainwidget;
 
 
 
@@ -34,19 +36,8 @@ static immutable string ui = q{
 				|label = "Compose"
 			}
 		}
-		Box main_box {
-			|orientation = Orientation.VERTICAL
-			|spacing = 0
 
-			Box top_bar {
-				|orientation = Orientation.HORIZONTAL
-				|spacing = 0
-				.Homogeneous = true
-			}
-
-			Stack main_stack {
-
-			}
+		MainWidget main_widget {
 		}
 	}
 };
@@ -57,15 +48,9 @@ static immutable string ui = q{
 class MainWindow: ApplicationWindow {
 	mixin(generate_ui_members(ui));
 
-	IPage[] pages;
+	Account account;
 
 	this(Application app) {
 		mixin(generate_ui(ui));
-
-		foreach (i; 0..7) {
-			Button b = new Button("X");
-			top_bar.add(b);
-		}
-
 	}
 }
