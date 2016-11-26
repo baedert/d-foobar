@@ -6,8 +6,10 @@ import gtk.StyleContext;
 import gdk.Screen;
 
 import std.stdio;
+import std.algorithm;
 
 import mainwindow;
+import account;
 
 static immutable string app_css = import("style.css");
 
@@ -19,13 +21,26 @@ public:
 		addOnActivate(&activate);
 	}
 
+	void start_account(Account acc) {
+		if(active_accounts.canFind(acc)) {
+			writeln("account ", acc.screen_name, " already active");
+			return;
+		}
+
+		active_accounts ~= acc;
+		acc.init_proxy();
+		acc.user_stream.start();
+	}
+
 private:
+	Account[] active_accounts;
+
 	void startup(GApplication.Application app) {
-		auto provider = new CssProvider();
-		provider.loadFromData(app_css);
-		StyleContext.addProviderForScreen(Screen.getDefault(),
-		                                  provider,
-		                                  600); // PRIORITY_APPLICATION
+		//auto provider = new CssProvider();
+		//provider.loadFromData(app_css);
+		//StyleContext.addProviderForScreen(Screen.getDefault(),
+										  //provider,
+										  //600); // PRIORITY_APPLICATION
 	}
 
 	void activate(GApplication.Application app) {

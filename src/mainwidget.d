@@ -2,12 +2,11 @@
 import gtk.Box;
 import gtk.Stack;
 import gtk.Button;
-import gtk.ToggleButton;
+import gtk.RadioButton;
 
 import gtkutils;
 import ipage;
 import hometimeline;
-
 
 
 static immutable string ui = q{
@@ -31,14 +30,13 @@ public:
 	this() {
 		mixin(generate_ui(ui));
 
-		
-		this.pages = new IPage[1];
-		this.pages[0] = new HomeTimeline();
 
+		pages = new IPage[1];
+		pages[0] = new HomeTimeline();
 
-		this.dummy_button = new ToggleButton();
+		this.dummy_button = new RadioButton("Dummy");
 		foreach (page; pages) {
-			Button b = new ToggleButton("A");
+			auto b = page.get_button(this.dummy_button);
 			top_bar.add(b);
 		}
 
@@ -48,6 +46,5 @@ public:
 private:
 	mixin(generate_ui_members(ui));
 	IPage[] pages;
-	ToggleButton dummy_button;
-
+	RadioButton dummy_button;
 }

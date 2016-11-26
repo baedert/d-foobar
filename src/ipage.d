@@ -1,5 +1,6 @@
-
+import gtk.RadioButton;
 
 interface IPage {
-  string get_title();
+  abstract string get_title();
+  abstract RadioButton get_button(RadioButton group);
 }

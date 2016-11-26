@@ -12,7 +12,9 @@ input_files = files([
   'src/account.d',
   'src/twitter.d',
   'src/avatarwidget.d',
-  'src/hometimeline.d'
+  'src/hometimeline.d',
+  'src/userstream.d',
+  'src/rest.d',
 ])
 
 

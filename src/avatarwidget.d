@@ -1,10 +1,8 @@
+import gtk.Image;
 
+class AvatarWidget : Image {
 
-import gtk.Widget;
-
-//class AvatarWidget : Widget {
-	
-	//this() {
-		//super();
-	//}
-//}
+	this() {
+		super();
+	}
+}

@@ -10,13 +10,18 @@ import gtk.HeaderBar;
 import gtk.Separator;
 import gtk.Application;
 import gtk.ApplicationWindow;
+import gtk.Image;
 
 
 import gtkutils;
 import account;
 import mainwidget;
+import avatarwidget;
 
 
+/+
+  TODO: How to create GtkImage instances with an icon name?
++/
 
 static immutable string ui = q{
 	ApplicationWindow this {
@@ -25,7 +30,9 @@ static immutable string ui = q{
 			.ShowCloseButton = true
 			.Title = "Corebird"
 			Button account_button {
-				|label = "Hey"
+				AvatarWidget {
+
+				}
 			}
 
 			Separator {
@@ -33,7 +40,6 @@ static immutable string ui = q{
 			}
 
 			ToggleButton compose_button {
-				|label = "Compose"
 			}
 		}
 
