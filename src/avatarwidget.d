@@ -48,14 +48,12 @@ class AvatarWidget : Widget {
 		}
 
 		static void customClassInit(GtkWidgetClass *klass) {
-			writeln("class init");
 			klass.getPreferredWidth  = &customGetPreferredWidth;
 			klass.getPreferredHeight = &customGetPreferredHeight;
 			klass.draw               = &customDraw;
 		}
 
 		static void customInit(GtkWidget *widget) {
-			writeln("init");
 			gtk_widget_set_has_window(widget, false);
 		}
 

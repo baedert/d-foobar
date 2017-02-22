@@ -1,31 +1,39 @@
-
 import ipage;
 import gtk.RadioButton;
 import gtk.ListBox;
 import gtk.ScrolledWindow;
 import glib.ListSG;
+import gtk.Widget;
 
 
-class HomeTimeline : ScrolledWindow, IPage {
+class HomeTimeline : IPage {
 public:
-	//this() {
-		//super();
-	//}
+	this() {
+		scrolledWindow = new ScrolledWindow();
+		listbox = new ListBox();
 
-	override string get_title() {
+		scrolledWindow.add(listbox);
+	}
+
+	override string getTitle() {
 		return "Home";
 	}
 
-	override RadioButton get_button(RadioButton group) {
-		if (radio_button is null) {
-			radio_button = new RadioButton(group, "Home");
-			radio_button.setMode(false);
+	override RadioButton getButton(RadioButton group) {
+		if (radioButton is null) {
+			radioButton = new RadioButton(group, "Home");
+			radioButton.setMode(false);
 		}
 
-		return radio_button;
+		return radioButton;
+	}
+
+	override Widget getWidget() {
+		return this.scrolledWindow;
 	}
 
 private:
-	RadioButton radio_button;
+	RadioButton radioButton;
+	ScrolledWindow scrolledWindow;
 	ListBox listbox;
 }

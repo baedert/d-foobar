@@ -5,11 +5,11 @@ import std.conv;
 
 import gtk.Bin;
 
-string generate_ui_members(const string ui_data) {
+string uiMembers(const string ui_data) {
 	return __generate_ui (ui_data, true);
 }
 
-string generate_ui(const string ui_data) {
+string uiInit(const string ui_data) {
 	return __generate_ui(ui_data, false);
 }
 

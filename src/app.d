@@ -21,19 +21,19 @@ public:
 		addOnActivate(&activate);
 	}
 
-	void start_account(Account acc) {
-		if(active_accounts.canFind(acc)) {
-			writeln("account ", acc.screen_name, " already active");
+	void startAccount(Account acc) {
+		if(activeAccounts.canFind(acc)) {
+			writeln("account ", acc.screenName, " already active");
 			return;
 		}
 
-		active_accounts ~= acc;
+		activeAccounts ~= acc;
 		acc.initProxy();
-		acc.user_stream.start();
+		acc.userStream.start();
 	}
 
 private:
-	Account[] active_accounts;
+	Account[] activeAccounts;
 
 	void startup(GApplication.Application app) {
 		auto provider = new CssProvider();

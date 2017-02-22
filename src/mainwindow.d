@@ -52,11 +52,11 @@ enum ui = q{
 };
 
 class MainWindow: ApplicationWindow {
-	mixin(generate_ui_members(ui));
+	mixin(uiMembers(ui));
 
 	Account account;
 
 	this(Application app) {
-		mixin(generate_ui(ui));
+		mixin(uiInit(ui));
 	}
 }

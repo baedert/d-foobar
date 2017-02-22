@@ -4,13 +4,13 @@ import userstream;
 class Account {
 public:
 	long id;
-	string screen_name;
+	string screenName;
 	string name;
-	UserStream user_stream;
+	UserStream userStream;
 
-	this(long id, string screen_name, string name) {
+	this(long id, string screenName, string name) {
 		this.id = id;
-		this.screen_name = screen_name;
+		this.screenName = screenName;
 		this.name = name;
 	}
 

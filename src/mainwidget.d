@@ -14,13 +14,13 @@ enum ui = q{
 		|orientation = Orientation.VERTICAL
 		|spacing = 0
 
-		Box top_bar {
+		Box topBar {
 			|orientation = Orientation.HORIZONTAL
 			|spacing = 0
 			.Homogeneous = true
 		}
 
-		Stack main_stack {
+		Stack mainStack {
 
 		}
 	}
@@ -28,23 +28,28 @@ enum ui = q{
 class MainWidget : Box {
 public:
 	this() {
-		mixin(generate_ui(ui));
+		mixin(uiInit(ui));
 
 
 		pages = new IPage[1];
 		pages[0] = new HomeTimeline();
 
-		this.dummy_button = new RadioButton("Dummy");
+		this.dummyButton = new RadioButton("Dummy");
 		foreach (page; pages) {
-			auto b = page.get_button(this.dummy_button);
-			top_bar.add(b);
+			auto b = page.getButton(this.dummyButton);
+			auto w = page.getWidget();
+			topBar.add(b);
+
+			w.setHexpand(true);
+			w.setVexpand(true);
+			mainStack.add(page.getWidget());
 		}
 
-		top_bar.getStyleContext().addClass("topbar");
+		topBar.getStyleContext().addClass("topbar");
 	}
 
 private:
-	mixin(generate_ui_members(ui));
+	mixin(uiMembers(ui));
 	IPage[] pages;
-	RadioButton dummy_button;
+	RadioButton dummyButton;
 }
