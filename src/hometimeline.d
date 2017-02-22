@@ -4,6 +4,7 @@ import gtk.ListBox;
 import gtk.ScrolledWindow;
 import glib.ListSG;
 import gtk.Widget;
+import gtk.Image;
 
 
 class HomeTimeline : IPage {
@@ -21,7 +22,8 @@ public:
 
 	override RadioButton getButton(RadioButton group) {
 		if (radioButton is null) {
-			radioButton = new RadioButton(group, "Home");
+			radioButton = new RadioButton(group, null);
+			radioButton.add(new Image("list-add-symbolic", IconSize.BUTTON));
 			radioButton.setMode(false);
 		}
 

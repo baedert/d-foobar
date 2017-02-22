@@ -18,11 +18,6 @@ import account;
 import mainwidget;
 import avatarwidget;
 
-
-/+
-  TODO: How to create GtkImage instances with an icon name?
-+/
-
 enum ui = q{
 	ApplicationWindow this {
 		|app = app
