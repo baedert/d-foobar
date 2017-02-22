@@ -1,11 +1,12 @@
 import std.stdio;
+import std.parallelism;
 
 enum Method {
 	GET,
 	POST
 }
 
-struct Request {
+class Request {
 public:
 	this(string addr, Method method) {
 		this.addr = addr;
@@ -13,40 +14,34 @@ public:
 	}
 
 	void invoke() const {
-		import core.thread;
-
-		auto t = new Thread(&invoke_func);
-		t.start();
 	}
 
 	pure
-	void add_param(T)(string name, T value) {
+	Request param(T)(string name, T value) {
 		import std.conv;
 		params[name] = to!string(value);
+
+		return this;
 	}
 
 private:
 	string addr;
 	Method method;
 	string[string] params;
-
-	void invoke_func() {
-		//writeln (__FUNCTION__, " from thread");
-	}
 }
 
 
-struct Proxy {
+class Proxy {
 	this(string base_url) {
 		this.base_url = base_url;
 	}
 
 	Request get(const string func) {
-		return Request(base_url ~ func, Method.GET);
+		return new Request(base_url ~ func, Method.GET);
 	}
 
 	Request post(const string func) {
-		return Request(base_url ~ func, Method.POST);
+		return new Request(base_url ~ func, Method.POST);
 	}
 
 private:
@@ -55,9 +50,8 @@ private:
 
 
 unittest {
-  writeln ("unittest");
-  auto p = Proxy("127.0.0.1/");
+  auto p = new Proxy("127.0.0.1/");
   auto r = p.get("foo");
-  r.add_param("s", "v");
+  r.param("s", "v");
   r.invoke();
 }

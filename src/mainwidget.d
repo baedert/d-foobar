@@ -9,7 +9,7 @@ import ipage;
 import hometimeline;
 
 
-static immutable string ui = q{
+enum ui = q{
 	Box this {
 		|orientation = Orientation.VERTICAL
 		|spacing = 0

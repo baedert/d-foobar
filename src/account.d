@@ -14,7 +14,7 @@ public:
 		this.name = name;
 	}
 
-	void init_proxy() {
+	void initProxy() {
 
 	}
 

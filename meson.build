@@ -26,6 +26,7 @@ cgparser = executable(
   dependencies: [gtkd_dep],
   d_args: ['-I../src/', # XXX This should become unnecessary with a later meson version
            '-J../src/',
-           '-g',
+           '-gc',
+           '-d-debug',
            '-unittest']
 )

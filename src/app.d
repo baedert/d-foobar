@@ -28,7 +28,7 @@ public:
 		}
 
 		active_accounts ~= acc;
-		acc.init_proxy();
+		acc.initProxy();
 		acc.user_stream.start();
 	}
 
@@ -36,11 +36,11 @@ private:
 	Account[] active_accounts;
 
 	void startup(GApplication.Application app) {
-		//auto provider = new CssProvider();
-		//provider.loadFromData(app_css);
-		//StyleContext.addProviderForScreen(Screen.getDefault(),
-										  //provider,
-										  //600); // PRIORITY_APPLICATION
+		auto provider = new CssProvider();
+		provider.loadFromData(app_css);
+		StyleContext.addProviderForScreen(Screen.getDefault(),
+										  provider,
+										  600); // PRIORITY_APPLICATION
 	}
 
 	void activate(GApplication.Application app) {

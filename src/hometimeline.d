@@ -1,14 +1,16 @@
 
 import ipage;
 import gtk.RadioButton;
+import gtk.ListBox;
+import gtk.ScrolledWindow;
 import glib.ListSG;
 
 
-class HomeTimeline : IPage {
+class HomeTimeline : ScrolledWindow, IPage {
 public:
-	this() {
-
-	}
+	//this() {
+		//super();
+	//}
 
 	override string get_title() {
 		return "Home";
@@ -24,5 +26,6 @@ public:
 	}
 
 private:
-	RadioButton radio_button = null;
+	RadioButton radio_button;
+	ListBox listbox;
 }

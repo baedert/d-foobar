@@ -23,7 +23,7 @@ import avatarwidget;
   TODO: How to create GtkImage instances with an icon name?
 +/
 
-static immutable string ui = q{
+enum ui = q{
 	ApplicationWindow this {
 		|app = app
 		HeaderBar header_bar $titlebar {
@@ -40,6 +40,9 @@ static immutable string ui = q{
 			}
 
 			ToggleButton compose_button {
+				Image {
+					.FromIconName = "list-add-symbolic", IconSize.BUTTON
+				}
 			}
 		}
 
@@ -47,9 +50,6 @@ static immutable string ui = q{
 		}
 	}
 };
-
-
-
 
 class MainWindow: ApplicationWindow {
 	mixin(generate_ui_members(ui));
