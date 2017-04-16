@@ -25,6 +25,7 @@ enum ui = q{
 			.ShowCloseButton = true
 			.Title = "Corebird"
 			Button account_button {
+				#style = account-button
 				AvatarWidget {
 
 				}

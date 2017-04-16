@@ -88,7 +88,7 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 	}
 
 	pure
-	string get_until(char _c) {
+	string getUntil(char _c) {
 		string result;
 		while (c != _c && c != EOF) {
 			result ~= c;
@@ -128,18 +128,27 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 
 		string[string] construct_props;
 		string[string] non_construct_props;
+		string[] styleClasses;
 		expect("{");
 		next();
-		while (ident[0] == '.' || ident[0] == '|') {
-			bool construct = (ident[0] == '|');
-			string prop_name = ident;
-			next();
-			expect("=");
-			string prop_value = get_until('\n').strip();
-			if (construct) {
-				construct_props[prop_name[1..$]] = prop_value;
+		while (ident[0] == '.' || ident[0] == '|' || ident[0] == '#') {
+			if (ident[0] == '#') {
+				// Style classes
+				next();
+				expect("=");
+				string classesStr = getUntil('\n').strip();
+				styleClasses = classesStr.split(',');
 			} else {
-				non_construct_props[prop_name[1..$]] = prop_value;
+				bool construct = (ident[0] == '|');
+				string prop_name = ident;
+				next();
+				expect("=");
+				string prop_value = getUntil('\n').strip();
+				if (construct) {
+					construct_props[prop_name[1..$]] = prop_value;
+				} else {
+					non_construct_props[prop_name[1..$]] = prop_value;
+				}
 			}
 
 			next();
@@ -161,6 +170,8 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 			foreach (prop_name; non_construct_props.keys) {
 				result ~= child_info.id ~ ".set" ~ prop_name ~ "(" ~ non_construct_props[prop_name] ~ ");\n";
 			}
+			foreach (c; styleClasses)
+				result ~= child_info.id ~ ".getStyleContext().addClass(\"" ~ c ~ "\");\n";
 		} else {
 			result ~= "super(";
 			foreach (foo; construct_props.keys) {
@@ -177,7 +188,6 @@ private string __generate_ui(const string ui_data, bool just_members = false) {
 				result ~= child_info.id ~ ".add(" ~ child.id ~ ");\n";
 		}
 
-		//next();
 		next();
 
 		return child_info;

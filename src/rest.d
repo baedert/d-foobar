@@ -6,6 +6,10 @@ enum Method {
 	POST
 }
 
+void runInThread(Request r) {
+	r.execute();
+}
+
 class Request {
 public:
 	this(string addr, Method method) {
@@ -13,7 +17,10 @@ public:
 		this.method = method;
 	}
 
-	void invoke() const {
+	auto invoke() {
+		auto t = task!runInThread(this);
+		t.executeInNewThread();
+		return t;
 	}
 
 	pure
@@ -24,12 +31,15 @@ public:
 		return this;
 	}
 
+	void execute() {
+
+	}
+
 private:
 	string addr;
 	Method method;
 	string[string] params;
 }
-
 
 class Proxy {
 	this(string base_url) {
@@ -54,4 +64,8 @@ unittest {
   auto r = p.get("foo");
   r.param("s", "v");
   r.invoke();
+
+
+  r = p.get("bar");
+  r.invoke().yieldForce();
 }

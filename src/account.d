@@ -1,5 +1,6 @@
 
 import userstream;
+import rest;
 
 class Account {
 public:
@@ -15,9 +16,10 @@ public:
 	}
 
 	void initProxy() {
-
+		this.proxy = new Proxy("https://api.twittter.com/");
 	}
 
 private:
+	Proxy proxy;
 
 }

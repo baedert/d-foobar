@@ -1,5 +1,10 @@
 @define-color topbar_bg #333;
 
+.account-button {
+	background-image: none;
+	background-color: blue;
+}
+
 .topbar button image {
   -gtk-icon-shadow: none;
   color: #ddd;
