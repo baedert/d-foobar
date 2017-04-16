@@ -44,7 +44,7 @@ private:
 	}
 
 	void activate(GApplication.Application app) {
-		auto window = new MainWindow(this);
+		auto window = new MainWindow(this, null);
 		this.addWindow(window);
 		window.showAll();
 	}

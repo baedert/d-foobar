@@ -48,11 +48,23 @@ enum ui = q{
 };
 
 class MainWindow: ApplicationWindow {
-	mixin(uiMembers(ui));
-
-	Account account;
-
-	this(Application app) {
+public:
+	this(Application app, Account acc) {
 		mixin(uiInit(ui));
+		changeAccount(acc);
 	}
+
+	void changeAccount(Account acc) {
+		this.account = account;
+
+		if (acc is null) {
+			// Show the "Add new account" UI
+		} else {
+
+		}
+	}
+
+private:
+	mixin(uiMembers(ui));
+	Account account;
 }
