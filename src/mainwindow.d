@@ -21,7 +21,7 @@ import avatarwidget;
 enum ui = q{
 	ApplicationWindow this {
 		|app = app
-		HeaderBar header_bar $titlebar {
+		HeaderBar header_bar $Titlebar {
 			.ShowCloseButton = true
 			.Title = "Corebird"
 			Button account_button {
